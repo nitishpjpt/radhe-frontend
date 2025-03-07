@@ -448,13 +448,13 @@ const Checkout = () => {
           {isLoggedIn() ? "Pay now" : "Please log in to proceed"}
         </button>
         <div className="flex justify-between text-sm text-gray-600 mt-4">
-          <a href="#" className="hover:underline">
+          <a href="/refund-policy" className="hover:underline">
             Refund policy
           </a>
-          <a href="#" className="hover:underline">
+          <a href="/privacy-policy" className="hover:underline">
             Privacy policy
           </a>
-          <a href="#" className="hover:underline">
+          <a href="/terms-of-use" className="hover:underline">
             Terms of service
           </a>
         </div>

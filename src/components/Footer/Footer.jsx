@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
 import Logo from "../../assets/logo.svg";
 
@@ -6,12 +7,9 @@ const Footer = () => {
     <footer className="w-full">
       {/* Newsletter Section */}
       <div className="bg-blue-100 py-6 text-center">
-        <h2 className="text-2xl font-semibold">
-          Get our latest news and special sales
-        </h2>
+        <h2 className="text-2xl font-semibold">Get our latest news and special sales</h2>
         <p className="text-gray-600 mt-2">
-          You may unsubscribe at any moment. For that purpose, please find our
-          contact info in the legal notice.
+          You may unsubscribe at any moment. For that purpose, please find our contact info in the legal notice.
         </p>
         <div className="mt-4 flex justify-center">
           <input
@@ -31,7 +29,6 @@ const Footer = () => {
           {/* Logo & Social Media Section */}
           <div className="flex flex-col items-center">
             <img className="h-20 sm:h-24 w-auto" src={Logo} alt="Radhe Laptops Logo" />
-
             <h5 className="text-sm font-semibold uppercase mt-4">Follow us on</h5>
             <div className="flex space-x-4 mt-2">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
@@ -53,13 +50,13 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold uppercase mb-4">Featured Products</h3>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="/products/hard-disk" className="hover:text-white">Hard Disk</a></li>
-              <li><a href="/products/keyboard" className="hover:text-white">Keyboard</a></li>
-              <li><a href="/products/mouse" className="hover:text-white">Mouse</a></li>
-              <li><a href="/products/ram" className="hover:text-white">RAM</a></li>
-              <li><a href="/products/processor" className="hover:text-white">Processor</a></li>
-              <li><a href="/products/cooling-fan" className="hover:text-white">Cooling Fan</a></li>
-              <li><a href="/products/graphic-card" className="hover:text-white">Graphic Card</a></li>
+              <li><Link to="/products/hard-disk" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Hard Disk</Link></li>
+              <li><Link to="/products/keyboard" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Keyboard</Link></li>
+              <li><Link to="/products/mouse" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Mouse</Link></li>
+              <li><Link to="/products/ram" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">RAM</Link></li>
+              <li><Link to="/products/processor" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Processor</Link></li>
+              <li><Link to="/products/cooling-fan" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Cooling Fan</Link></li>
+              <li><Link to="/products/graphic-card" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Graphic Card</Link></li>
             </ul>
           </div>
 
@@ -67,14 +64,14 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold uppercase mb-4">Laptop Brands</h3>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="/brands/asus" className="hover:text-white">Asus</a></li>
-              <li><a href="/brands/lenovo" className="hover:text-white">Lenovo</a></li>
-              <li><a href="/brands/mi" className="hover:text-white">Mi</a></li>
-              <li><a href="/brands/apple" className="hover:text-white">Apple</a></li>
-              <li><a href="/brands/dell" className="hover:text-white">Dell</a></li>
-              <li><a href="/brands/hp" className="hover:text-white">HP</a></li>
-              <li><a href="/brands/acer" className="hover:text-white">Acer</a></li>
-              <li><a href="/brands/toshiba" className="hover:text-white">Toshiba</a></li>
+              <li><Link to="/brands/asus" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Asus</Link></li>
+              <li><Link to="/brands/lenovo" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Lenovo</Link></li>
+              <li><Link to="/brands/mi" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Mi</Link></li>
+              <li><Link to="/brands/apple" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Apple</Link></li>
+              <li><Link to="/brands/dell" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Dell</Link></li>
+              <li><Link to="/brands/hp" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">HP</Link></li>
+              <li><Link to="/brands/acer" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Acer</Link></li>
+              <li><Link to="/brands/toshiba" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Toshiba</Link></li>
             </ul>
           </div>
 
@@ -82,10 +79,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold uppercase mb-4">Help & Support</h3>
             <ul className="space-y-2 text-gray-400">
-              {/* <li><a href="/faq" className="hover:text-white">FAQ</a></li> */}
-              <li><a href="/contact-us" className="hover:text-white">Contact Us</a></li>
-              <li><a href="/warranty-policy" className="hover:text-white">Warranty Policy</a></li>
-              <li><a href="/refund-policy" className="hover:text-white">Refund Policy</a></li>
+              <li><Link to="/contact-us" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Contact Us</Link></li>
+              <li><Link to="/warranty-policy" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Warranty Policy</Link></li>
+              <li><Link to="/refund-policy" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Refund Policy</Link></li>
             </ul>
           </div>
 
@@ -93,9 +89,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold uppercase mb-4">More Info</h3>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="/terms-and-conditions" className="hover:text-white">Terms & Conditions</a></li>
-              <li><a href="/privacy-policy" className="hover:text-white">Privacy Policy</a></li>
-              <li><a href="/terms-of-use" className="hover:text-white">Terms of Use</a></li>
+              <li><Link to="/terms-and-conditions" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Terms & Conditions</Link></li>
+              <li><Link to="/privacy-policy" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Privacy Policy</Link></li>
+              <li><Link to="/terms-of-use" onClick={() => window.scrollTo(0, 0)} className="hover:text-white">Terms of Use</Link></li>
             </ul>
           </div>
         </div>
