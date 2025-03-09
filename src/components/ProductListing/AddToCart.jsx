@@ -26,9 +26,7 @@ const AddToCart = () => {
 
           // Fetch cart items from the backend
           const response = await axios.post(
-            `${
-              import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
-            }/custumer/cart/all`,
+            `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/custumer/cart/all`,
             { customerId }, // Send customerId in the request body
             {
               headers: {
@@ -38,21 +36,16 @@ const AddToCart = () => {
           );
 
           setCartItems(response.data.cart);
-          console.log(response.data.cart)
-
         } else {
           // Fetch cart items from localStorage for guest users
           let guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
-           // Fix nested product structure if necessary
-              guestCart = guestCart.map((item) => ({
-          product: item.product.product || item.product, // Fix nested structure
-          quantity: item.quantity,
-        }));
+          // Fix nested product structure if necessary
+          guestCart = guestCart.map((item) => ({
+            product: item.product.product || item.product, // Fix nested structure
+            quantity: item.quantity,
+          }));
 
-        setCartItems(guestCart);
-        console.log(guestCart)
-      
-         
+          setCartItems(guestCart);
         }
       } catch (error) {
         console.error("Error fetching cart items:", error);
@@ -89,9 +82,7 @@ const AddToCart = () => {
 
         // Update quantity in the backend for logged-in users
         await axios.put(
-          `${
-            import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
-          }/custumer/cart/update`,
+          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/custumer/cart/update`,
           {
             customerId, // Pass customerId
             productId, // Pass productId
@@ -109,7 +100,7 @@ const AddToCart = () => {
         // Update quantity in localStorage for guest users
         const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
         const updatedCart = guestCart.map((item) =>
-          item.product._id === productId
+          item.product._id === productId // Ensure correct productId comparison
             ? { ...item, quantity: newQuantity }
             : item
         );
@@ -130,9 +121,7 @@ const AddToCart = () => {
       if (customerId) {
         // Remove item from the backend for logged-in users
         await axios.delete(
-          `${
-            import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
-          }/custumer/cart/remove/${productId}`,
+          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/custumer/cart/remove/${productId}`,
           { data: { customerId } } // Pass customerId in the request body
         );
 
@@ -146,7 +135,7 @@ const AddToCart = () => {
         // Remove item from localStorage for guest users
         const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
         const updatedCart = guestCart.filter(
-          (item) => item.product._id !== productId // Use item.product._id
+          (item) => item.product._id !== productId // Ensure correct productId comparison
         );
         localStorage.setItem("guestCart", JSON.stringify(updatedCart));
         setCartItems(updatedCart);
@@ -156,7 +145,6 @@ const AddToCart = () => {
     }
   };
 
-  
   // Navigate to checkout
   const checkoutPage = () => {
     navigate(`/checkout`);
@@ -253,17 +241,8 @@ const AddToCart = () => {
                             atob(token.split(".")[1])
                           );
                           const customerId = decodedToken.id; // Get customerId from the token
-                          console.log(
-                            "Product ID in onClick:",
-                            item.product._id
-                          ); // Debugging line
-                          console.log("Customer ID in onClick:", customerId); // Debugging line
                           handleRemoveItem(item.product._id, customerId); // Pass both productId and customerId
                         } else {
-                          console.log(
-                            "Product ID in onClick:",
-                            item.product._id
-                          ); // Debugging line
                           handleRemoveItem(item.product._id); // For guest users, only pass productId
                         }
                       }}

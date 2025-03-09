@@ -69,6 +69,7 @@ const Navbar = () => {
         } else {
           const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
           setCartItems(guestCart.length);
+         
         }
       } catch (error) {
         console.error("Error fetching cart items:", error);
@@ -106,7 +107,7 @@ const Navbar = () => {
       <header className="bg-white flex justify-center items-center">
         <div className="container flex flex-row justify-between items-center px-2 w-full max-w-[1200px]">
           <div className="ml-[8rem] flex justify-center flex-grow">
-            <img className="w-[7vw] min-w-[80px]" src={Logo} alt="logo" />
+           <Link to="/"><img className="w-[7vw] min-w-[80px]" src={Logo} alt="logo" /></Link>
           </div>
 
           <div className="flex items-center space-x-6">

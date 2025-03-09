@@ -128,13 +128,13 @@ const ProductListing = ({ products }) => {
                   <div className="absolute left-4 top-4 flex flex-col gap-2">
                     <button
                       onClick={() => handleEditProduct(product)}
-                      className="text-xl p-2 text-center text-white bg-green-500 w-10 h-10 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110 hover:bg-green-600"
+                      className="text-xl p-2 text-center text-white bg-green-500 w-10 h-10 rounded-full transition-all duration-300"
                     >
                       <AiOutlineEdit />
                     </button>
                     <button
                       onClick={() => handleDeleteProduct(product._id)}
-                      className="text-xl p-2 text-center text-white bg-red-500 w-10 h-10 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110 hover:bg-red-600"
+                      className="text-xl p-2 text-center text-white bg-red-500 w-10 h-10 rounded-full transition-all duration-300"
                     >
                       <AiOutlineDelete />
                     </button>

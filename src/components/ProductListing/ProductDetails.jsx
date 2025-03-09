@@ -50,6 +50,11 @@ const ProductDetail = () => {
     const productId = id; // Product ID from URL
     const quantity = 1; // Default quantity
   
+    if (!productId) {
+      alert("Product ID is missing.");
+      return;
+    }
+  
     if (!token) {
       // Guest user: Store cart in localStorage
       const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
@@ -63,18 +68,20 @@ const ProductDetail = () => {
           const productResponse = await axios.get(
             `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/product/product/${productId}`
           );
-              const product = productResponse.data;
-            console.log(product)
+          const product = productResponse.data;
+  
+          if (!product) {
+            throw new Error("Product not found");
+          }
   
           guestCart.push({
-            // productId,
+            productId,
             quantity,
-             product // Store full product details
+            product, // Store full product details
           });
   
-          localStorage.setItem("guestCart", JSON.stringify(guestCart));
           toast.success("Product added to cart!");
-          
+          localStorage.setItem("guestCart", JSON.stringify(guestCart));
         } catch (error) {
           console.error("Error fetching product details:", error);
           alert("Failed to fetch product details. Please try again.");
