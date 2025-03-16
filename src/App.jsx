@@ -26,6 +26,8 @@ import WarranyPolicy from "./components/PolicyPages.jsx/WarranyPolicy";
 import TermsOfUse from "./components/PolicyPages.jsx/TermsOfUse";
 import PrivacyPolicy from "./components/PolicyPages.jsx/PrivacyPolicy";
 import TermsCondition from "./components/PolicyPages.jsx/TermsCondition";
+import WhitelistPage from "./Whitelist/WhiteList";
+import OrderDetails from "./components/OrderDetails/OrderDetails";
 
 const decodeToken = (token) => {
   if (!token) {
@@ -80,6 +82,8 @@ const App = () => {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/all-collections" element={<Collections />} />
         <Route path="/add-to-cart" element={<AddToCart />} />
+        <Route path="/whitelist" element={<WhitelistPage/>}/>
+        <Route path="/order/details" element={<OrderDetails/>}/>
         <Route path="/" element={<Home />} />
         <Route path="/admin/login" element={<AdminLogin/>}/>
 

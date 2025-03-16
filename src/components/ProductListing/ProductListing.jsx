@@ -3,14 +3,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GrZoomIn } from "react-icons/gr";
-import { PiHeartStraightBold } from "react-icons/pi";
+import { PiHeartStraightBold, PiHeartStraightFill } from "react-icons/pi";
 import { AiOutlineClose, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import axios from "axios";
 
 const ProductListing = ({ products }) => {
   const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null); // State for editing product
   const [userRole, setUserRole] = useState(""); // State to store user role
+  const [whitelist, setWhitelist] = useState([]); // State to store whitelist
 
   // Fetch user role from localStorage or context
   useEffect(() => {
@@ -42,21 +44,28 @@ const ProductListing = ({ products }) => {
   const handleSaveProduct = async () => {
     try {
       const formData = new FormData();
-  
+
       // Append all fields to the FormData object
       formData.append("brandName", editingProduct.brandName);
       formData.append("productName", editingProduct.productName);
       formData.append("price", editingProduct.price);
+      formData.append("description", editingProduct.description);
+
       if (editingProduct.image) {
         formData.append("image", editingProduct.image); // Append the file
       }
-  
+
       // Send the FormData to the backend
-      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/product/${editingProduct._id}`, {
-        method: "PUT",
-        body: formData, // Send FormData instead of JSON
-      });
-  
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/product/${
+          editingProduct._id
+        }`,
+        {
+          method: "PUT",
+          body: formData, // Send FormData instead of JSON
+        }
+      );
+
       if (response.ok) {
         alert("Product updated successfully");
         setEditingProduct(null); // Close the edit modal
@@ -86,9 +95,12 @@ const ProductListing = ({ products }) => {
     if (confirmDelete) {
       try {
         // Send delete request to the backend
-        const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/product/${id}`, {
-          method: "DELETE",
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/product/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
         if (response.ok) {
           alert("Product deleted successfully");
           window.location.reload(); // Reload the page to reflect changes
@@ -101,6 +113,78 @@ const ProductListing = ({ products }) => {
     }
   };
 
+  const getLoggedInCustomerId = () => {
+    const token = localStorage.getItem("user");
+    if (!token) return null; // No token found
+
+    try {
+      const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decode the token payload
+      return decodedToken.id; // Return the customer ID
+    } catch (err) {
+      console.error("Invalid token:", err);
+      return null; // Invalid token
+    }
+  };
+  // Fetch user role and whitelist
+  useEffect(() => {
+    const token = localStorage.getItem("user");
+    if (token) {
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
+      setUserRole(decodedToken.role);
+
+      // Fetch whitelist
+      const fetchWhitelist = async () => {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/whitelist/${
+              decodedToken.id
+            }`,
+            { withCredentials: true }
+          );
+          setWhitelist(response.data.whitelist);
+        } catch (error) {
+          console.error("Error fetching whitelist:", error);
+        }
+      };
+
+      fetchWhitelist();
+    }
+  }, []);
+
+  // Check if a product is in the whitelist
+  const isProductInWhitelist = (productId) => {
+    return whitelist.some((item) => item.product._id === productId);
+  };
+  // Handle add to whitelist
+  const addToWhitelist = async (productId) => {
+    const customerId = getLoggedInCustomerId();
+    if (!customerId) {
+      alert("Please log in to add products to your whitelist.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/whitelist/add`,
+        { customerId, productId },
+        { withCredentials: true }
+      );
+      console.log(response.data.message);
+      // Refresh the whitelist
+      const updatedWhitelist = await axios.get(
+        `${
+          import.meta.env.VITE_REACT_APP_BACKEND_BASEURL
+        }/whitelist/${customerId}`,
+        { withCredentials: true }
+      );
+      setWhitelist(updatedWhitelist.data.whitelist);
+    } catch (error) {
+      console.error(
+        "Error adding to whitelist:",
+        error.response?.data?.message || error.message
+      );
+    }
+  };
   return (
     <div>
       <div className="mx-auto max-w-9xl px-4 py-10 sm:px-6 sm:py-24 lg:px-8">
@@ -141,8 +225,15 @@ const ProductListing = ({ products }) => {
                   </div>
                 )}
 
-                <GrZoomIn className="absolute right-4 text-xl p-2 text-center text-white bg-indigo-500 w-10 h-10 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110 hover:bg-indigo-500" />
-                <PiHeartStraightBold className="absolute right-4 top-[5rem] text-xl p-2 text-center text-white bg-indigo-500 w-10 h-10 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110 hover:bg-indigo-500" />
+                <GrZoomIn className="absolute right-4 text-xl p-2 text-center text-white bg-indigo-500 w-10 h-10 rounded-full transition-all duration-300" />
+                {/* Heart Icon */}
+                <button onClick={() => addToWhitelist(product._id)}>
+                  {isProductInWhitelist(product._id) ? (
+                    <PiHeartStraightFill className="absolute right-4 top-[5rem] text-xl p-2 text-center text-red-500 bg-white w-10 h-10 rounded-full transition-all duration-300" />
+                  ) : (
+                    <PiHeartStraightBold className="absolute right-4 top-[5rem] text-xl p-2 text-center text-white bg-indigo-500 w-10 h-10 rounded-full transition-all duration-300" />
+                  )}
+                </button>
 
                 <img
                   alt="product-img"
@@ -236,64 +327,74 @@ const ProductListing = ({ products }) => {
 
             <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
             <form
-  onSubmit={(e) => {
-    e.preventDefault();
-    handleSaveProduct();
-  }}
-  encType="multipart/form-data" // Required for file uploads
->
-  <div className="mb-4">
-    <label>Brand Name</label>
-    <input
-      type="text"
-      name="brandName"
-      value={editingProduct.brandName}
-      onChange={handleInputChange}
-      className="w-full p-2 border rounded"
-    />
-  </div>
-  <div className="mb-4">
-    <label>Product Name</label>
-    <input
-      type="text"
-      name="productName"
-      value={editingProduct.productName}
-      onChange={handleInputChange}
-      className="w-full p-2 border rounded"
-    />
-  </div>
-  <div className="mb-4">
-    <label>Price</label>
-    <input
-      type="number"
-      name="price"
-      value={editingProduct.price}
-      onChange={handleInputChange}
-      className="w-full p-2 border rounded"
-    />
-  </div>
-  <div className="mb-4">
-    <label>Image</label>
-    <input
-      type="file"
-      name="image"
-      onChange={(e) => {
-        // Update the editingProduct state with the selected file
-        setEditingProduct((prev) => ({
-          ...prev,
-          image: e.target.files[0], // Store the file object
-        }));
-      }}
-      className="w-full p-2 border rounded"
-    />
-  </div>
-  <button
-    type="submit"
-    className="bg-blue-500 text-white px-4 py-2 rounded"
-  >
-    Save Changes
-  </button>
-</form>
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSaveProduct();
+              }}
+              encType="multipart/form-data" // Required for file uploads
+            >
+              <div className="mb-4">
+                <label>Brand Name</label>
+                <input
+                  type="text"
+                  name="brandName"
+                  value={editingProduct.brandName}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label>Product Name</label>
+                <input
+                  type="text"
+                  name="productName"
+                  value={editingProduct.productName}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label>Product Description</label>
+                <input
+                  type="text"
+                  name="description"
+                  value={editingProduct.description}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label>Price</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={editingProduct.price}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label>Image</label>
+                <input
+                  type="file"
+                  name="image"
+                  onChange={(e) => {
+                    // Update the editingProduct state with the selected file
+                    setEditingProduct((prev) => ({
+                      ...prev,
+                      image: e.target.files[0], // Store the file object
+                    }));
+                  }}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Save Changes
+              </button>
+            </form>
           </div>
         </div>
       )}
