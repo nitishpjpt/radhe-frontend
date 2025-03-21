@@ -111,7 +111,7 @@ const Navbar = () => {
     <Disclosure as="nav" className="bg-[#F2F4FF]">
       <header className="bg-white flex justify-center items-center">
         <div className="container flex flex-row justify-between items-center px-2 w-full max-w-[1200px]">
-          <div className="ml-[8rem] flex justify-center flex-grow">
+          <div className="flex flex-grow justify-start sm:justify-center md:ml-[9rem]">
             <Link to="/">
               <img className="w-[7vw] min-w-[80px]" src={Logo} alt="logo" />
             </Link>
@@ -148,7 +148,7 @@ const Navbar = () => {
                     </h4>
                   </MenuItem>
                   {/* Conditionally render the Order Details link */}
-                  {loginDetails && (
+                  {loginDetails && loginDetails.role !== "admin" && (
                     <MenuItem>
                       <h4 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <Link to="/order/details">Order Details</Link>
@@ -157,14 +157,24 @@ const Navbar = () => {
                   )}
 
                   {user?.role === "admin" && (
-                    <MenuItem>
-                      <Link
-                        to="/add/products"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        Add Product
-                      </Link>
-                    </MenuItem>
+                    <>
+                      <MenuItem>
+                        <Link
+                          to="/add/products"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Add Product
+                        </Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <Link
+                          to="/contact-details"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Contact details
+                        </Link>
+                      </MenuItem>
+                    </>
                   )}
                   {loginDetails?.email && (
                     <MenuItem>

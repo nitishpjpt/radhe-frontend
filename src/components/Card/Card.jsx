@@ -1,48 +1,62 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ProductContext } from "../../Context/ProductContext/ProductContext";
 import { useNavigate } from "react-router-dom";
 
 const CardCarousel = () => {
   const navigate = useNavigate();
-
-  // Handle product click to navigate to product details page
-  const handleProductClick = (id) => {
-    navigate(`/product/${id}`);
-  };
-
-  const { productDetails } = useContext(ProductContext); // Access productDetails from context
+  const { productDetails } = useContext(ProductContext);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(1); // Default to 1 item per page
 
   // Filter products to only include those with the category "laptops"
   const accessoriesProducts = productDetails.filter(
     (product) => product.category.toLowerCase() === "laptops"
   );
 
+  // Update items per page based on screen size
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth >= 1024) {
+        setItemsPerPage(3); // Large screens
+      } else if (window.innerWidth >= 768) {
+        setItemsPerPage(2); // Medium screens
+      } else {
+        setItemsPerPage(1); // Small screens
+      }
+    };
+
+    updateItemsPerPage();
+    window.addEventListener("resize", updateItemsPerPage);
+    return () => window.removeEventListener("resize", updateItemsPerPage);
+  }, []);
+
   // Handle next slide
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex + 3 >= accessoriesProducts.length ? 0 : prevIndex + 3
+      prevIndex + itemsPerPage >= accessoriesProducts.length
+        ? 0
+        : prevIndex + itemsPerPage
     );
   };
 
   // Handle previous slide
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex - 3 < 0
-        ? Math.max(0, accessoriesProducts.length - 3)
-        : prevIndex - 3
+      prevIndex - itemsPerPage < 0
+        ? Math.max(0, accessoriesProducts.length - itemsPerPage)
+        : prevIndex - itemsPerPage
     );
   };
 
-  // If there are no product details, show a loading or empty state
   if (!accessoriesProducts || accessoriesProducts.length === 0) {
-    return (
-      <div className="text-center text-gray-500">No laptops available.</div>
-    );
+    return <div className="text-center text-gray-500">No laptops available.</div>;
   }
 
-  // Get the current three items to display
-  const currentItems = accessoriesProducts.slice(currentIndex, currentIndex + 3);
+  // Get the current items based on itemsPerPage
+  const currentItems = accessoriesProducts.slice(
+    currentIndex,
+    currentIndex + itemsPerPage
+  );
 
   return (
     <div className="relative flex items-center justify-center p-4">
@@ -55,21 +69,18 @@ const CardCarousel = () => {
       </button>
 
       {/* Carousel Items */}
-      <div className="grid grid-cols-1 sm:grid-cols-3  gap-6 w-full max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto">
         {currentItems.map((item) => (
           <div
-            key={item._id} // Use item._id as the key
+            key={item._id}
             className="shadow-xl rounded-xl overflow-hidden text-center p-6 transition flex flex-col justify-between cursor-pointer"
             style={{
-              backgroundColor: item.bgColor || "#F1F4FF", // Fallback color
-              color: item.textColor || "#41415E", // Fallback color
+              backgroundColor: item.bgColor || "#F1F4FF",
+              color: item.textColor || "#41415E",
             }}
-            onClick={() => handleProductClick(item._id)} // Navigate to product details on click
+            onClick={() => navigate(`/product/${item._id}`)}
           >
-            {/* Display optional fields if they exist */}
-            {item.brandName && (
-              <h5 className="text-lg font-semibold">{item.brandName}</h5>
-            )}
+            {item.brandName && <h5 className="text-lg font-semibold">{item.brandName}</h5>}
             <h2 className="text-xl font-semibold">{item.productName}</h2>
             <img
               src={item.image}

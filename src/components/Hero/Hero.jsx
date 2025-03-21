@@ -6,7 +6,7 @@ const HeroSection = () => {
     <div className="relative w-full p-[4rem] flex items-center justify-center bg-[#190D3A]  px-10">
       <div className="max-w-7xl w-full flex flex-col md:flex-row items-center justify-between text-white">
         {/* Left - Image Section */}
-       <div className="flex-1 flex justify-center lg:justify-center">
+       <div className="flex-1 flex justify-center lg:justify-center ">
                <img
                  src={Banner}
                  alt="Laptop"

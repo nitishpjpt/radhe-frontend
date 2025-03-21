@@ -28,6 +28,8 @@ import PrivacyPolicy from "./components/PolicyPages.jsx/PrivacyPolicy";
 import TermsCondition from "./components/PolicyPages.jsx/TermsCondition";
 import WhitelistPage from "./Whitelist/WhiteList";
 import OrderDetails from "./components/OrderDetails/OrderDetails";
+import BrandProducts from "./components/BrandProducts/BrandProducts";
+import ContactDetails from "./adminDashboard/Dashboard/ContactDetails";
 
 const decodeToken = (token) => {
   if (!token) {
@@ -71,7 +73,7 @@ const App = () => {
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register/>} />
+        <Route path="/register" element={<Register />} />
 
         {/* Protected Routes (Only for Logged-in Users) */}
         <Route path="/products/collections" element={<ProductListing />} />
@@ -82,20 +84,19 @@ const App = () => {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/all-collections" element={<Collections />} />
         <Route path="/add-to-cart" element={<AddToCart />} />
-        <Route path="/whitelist" element={<WhitelistPage/>}/>
-        <Route path="/order/details" element={<OrderDetails/>}/>
+        <Route path="/whitelist" element={<WhitelistPage />} />
+        <Route path="/order/details" element={<OrderDetails />} />
         <Route path="/" element={<Home />} />
-        <Route path="/admin/login" element={<AdminLogin/>}/>
-
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/brands/:brandName" element={<BrandProducts />} />
+        <Route path="/contact-details" element={<ContactDetails/>} />
 
         {/* other pages */}
-        <Route path="/refund-policy" element={<RefundPolicy/>}/>
-        <Route path="/warranty-policy" element={<WarranyPolicy/>}/>
-        <Route path="/terms-of-use" element={<TermsOfUse/>}/>
-        <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
-        <Route path="/terms-and-conditions" element={<TermsCondition/>}/>
-
-
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/warranty-policy" element={<WarranyPolicy />} />
+        <Route path="/terms-of-use" element={<TermsOfUse />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermsCondition />} />
 
         {/* admin routes */}
         <Route path="/add/products" element={<AddProduct />} />

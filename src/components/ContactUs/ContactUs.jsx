@@ -1,6 +1,74 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 const ContactUs = () => {
+  // State to manage form inputs
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  // State to manage form submission status
+  const [submissionStatus, setSubmissionStatus] = useState({
+    success: false,
+    message: "",
+  });
+
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Send POST request to backend using Axios
+      const response = await axios.post(
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/contact`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Handle success
+      if (response.status === 201) {
+        toast.success("Message sent successfully!");
+        setSubmissionStatus({
+          success: true,
+          message: "Message sent successfully!",
+        });
+        setFormData({
+          name: "",
+          email: "",
+          message: "",
+        });
+      }
+    } catch (error) {
+      // Handle error
+      console.error("Error submitting form:", error);
+      toast.error(
+        error.response?.data?.message ||
+          "An error occurred. Please try again later."
+      );
+      setSubmissionStatus({
+        success: false,
+        message:
+          error.response?.data?.message ||
+          "An error occurred. Please try again later.",
+      });
+    }
+  };
+
   return (
     <>
       <section className="bg-white dark:bg-slate-800" id="contact">
@@ -10,11 +78,11 @@ const ContactUs = () => {
               <p className="text-base font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-200">
                 Contact
               </p>
-              <h2 className="font-heading mb-4 font-bold tracking-tight text-gray-900 dark:text-white text-3xl sm:text-5xl">
+              <h2 className="font-heading mb-4 font-bold tracking-tight text-gray-900 dark:text-white text-3xl sm:text-3xl">
                 Get in Touch
               </h2>
               <p className="mx-auto mt-4 max-w-3xl text-xl text-gray-600 dark:text-slate-400">
-                In hac habitasse platea dictumst
+                Quality Laptops. Affordable Prices. Exceptional Support{" "}
               </p>
             </div>
           </div>
@@ -22,9 +90,10 @@ const ContactUs = () => {
             <div className="grid md:grid-cols-2">
               <div className="h-full pr-6">
                 <p className="mt-3 mb-12 text-lg text-gray-600 dark:text-slate-400">
-                  Class aptent taciti sociosqu ad litora torquent per conubia
-                  nostra, per inceptos himenaeos. Duis nec ipsum orci. Ut
-                  scelerisque sagittis ante, ac tincidunt sem venenatis ut.
+                  Have questions, feedback, or need assistance? We’re here to
+                  help you find the best refurbished laptops at the best prices.
+                  Reach out to us anytime, and our support team will get back to
+                  you as soon as possible.
                 </p>
                 <ul className="mb-6 md:mb-0">
                   <li className="flex">
@@ -50,10 +119,10 @@ const ContactUs = () => {
                         Our Address
                       </h3>
                       <p className="text-gray-600 dark:text-slate-400">
-                        1230 Maecenas Street Donec Road
+                        Radhe Laptops Pvt. Ltd. Plot No. 45,
                       </p>
                       <p className="text-gray-600 dark:text-slate-400">
-                        New York, EEUU
+                        Tech Market Street Delhi, India - 110076
                       </p>
                     </div>
                   </li>
@@ -81,10 +150,10 @@ const ContactUs = () => {
                         Contact
                       </h3>
                       <p className="text-gray-600 dark:text-slate-400">
-                        Mobile: +1 (123) 456-7890
+                        Mobile: +91 7461082945
                       </p>
                       <p className="text-gray-600 dark:text-slate-400">
-                        Mail: tailnext@gmail.com
+                        Mail: Sales@radhelaptops.com
                       </p>
                     </div>
                   </li>
@@ -111,10 +180,7 @@ const ContactUs = () => {
                         Working hours
                       </h3>
                       <p className="text-gray-600 dark:text-slate-400">
-                        Monday - Friday: 08:00 - 17:00
-                      </p>
-                      <p className="text-gray-600 dark:text-slate-400">
-                        Saturday &amp; Sunday: 08:00 - 12:00
+                        Monday - Sunday: Open 24 Hours
                       </p>
                     </div>
                   </li>
@@ -124,50 +190,47 @@ const ContactUs = () => {
                 <h2 className="mb-4 text-2xl font-bold dark:text-white">
                   Ready to Get Started?
                 </h2>
-                <form id="contactForm">
+                <form id="contactForm" onSubmit={handleSubmit}>
                   <div className="mb-6">
                     <div className="mx-0 mb-1 sm:mb-4">
                       <div className="mx-0 mb-1 sm:mb-4">
-                        <label
-                          for="name"
-                          class="pb-1 text-xs uppercase tracking-wider"
-                        ></label>
                         <input
                           type="text"
                           id="name"
                           autoComplete="given-name"
-                          placeholder="Your name"
+                          placeholder="Enter your full name"
                           className="mb-2 w-full rounded-md border border-gray-400 py-2 pl-2 pr-4 shadow-md dark:text-gray-300 sm:mb-0"
                           name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          required
                         />
                       </div>
                       <div className="mx-0 mb-1 sm:mb-4">
-                        <label
-                          for="email"
-                          class="pb-1 text-xs uppercase tracking-wider"
-                        ></label>
                         <input
                           type="email"
                           id="email"
                           autoComplete="email"
-                          placeholder="Your email address"
+                          placeholder="Enter your email address"
                           className="mb-2 w-full rounded-md border border-gray-400 py-2 pl-2 pr-4 shadow-md dark:text-gray-300 sm:mb-0"
                           name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          required
                         />
                       </div>
                     </div>
                     <div className="mx-0 mb-1 sm:mb-4">
-                      <label
-                        for="textarea"
-                        className="pb-1 text-xs uppercase tracking-wider"
-                      ></label>
                       <textarea
-                        id="textarea"
-                        name="textarea"
+                        id="message"
+                        name="message"
                         cols="30"
                         rows="5"
                         placeholder="Write your message..."
                         className="mb-2 w-full rounded-md border border-gray-400 py-2 pl-2 pr-4 shadow-md dark:text-gray-300 sm:mb-0"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        required
                       ></textarea>
                     </div>
                   </div>
@@ -180,6 +243,17 @@ const ContactUs = () => {
                     </button>
                   </div>
                 </form>
+                {submissionStatus.message && (
+                  <div
+                    className={`mt-4 text-center ${
+                      submissionStatus.success
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {submissionStatus.message}
+                  </div>
+                )}
               </div>
             </div>
           </div>

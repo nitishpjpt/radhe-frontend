@@ -187,7 +187,7 @@ const ProductListing = ({ products }) => {
   };
   return (
     <div>
-      <div className="mx-auto max-w-9xl px-4 py-10 sm:px-6 sm:py-24 lg:px-8">
+      <div className="mx-auto max-w-9xl px-4 py-10 sm:px-6 sm:py-24 lg:px-8 ">
         <div className="flex justify-center items-center bg-[#F2F4FF] p-10 rounded-md">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900">
             All Collections
@@ -201,63 +201,65 @@ const ProductListing = ({ products }) => {
             </h2>
           </div>
         ) : (
-          <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+          <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2  lg:grid-cols-1 xl:grid-cols-2">
             {products.map((product) => (
               <div
                 key={product._id}
-                className="relative group cursor-pointer p-6 bg-white rounded-lg shadow-lg transition-all duration-300 hover:shadow-2xl hover:shadow-gray-400 hover:-translate-y-2 w-[370px] mx-auto"
+                className="flex justify-center items-center min-h-screen"
               >
-                {/* Edit and Delete Buttons (Visible only for admin) */}
-                {userRole === "admin" && (
-                  <div className="absolute left-4 top-4 flex flex-col gap-2">
+                <div className="relative group cursor-pointer p-6 bg-white rounded-lg shadow-lg transition-all duration-300 hover:shadow-2xl hover:shadow-gray-400 hover:-translate-y-2 w-[370px] mx-auto">
+                  {/* Edit and Delete Buttons (Visible only for admin) */}
+                  {userRole === "admin" && (
+                    <div className="absolute left-4 top-4 flex flex-col gap-2">
+                      <button
+                        onClick={() => handleEditProduct(product)}
+                        className="text-xl p-2 text-center text-white bg-green-500 w-10 h-10 rounded-full transition-all duration-300"
+                      >
+                        <AiOutlineEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProduct(product._id)}
+                        className="text-xl p-2 text-center text-white bg-red-500 w-10 h-10 rounded-full transition-all duration-300"
+                      >
+                        <AiOutlineDelete />
+                      </button>
+                    </div>
+                  )}
+
+                  <GrZoomIn className="absolute right-4 text-xl p-2 text-center text-white bg-indigo-500 w-10 h-10 rounded-full transition-all duration-300" />
+                  {/* Heart Icon */}
+                  <button onClick={() => addToWhitelist(product._id)}>
+                    {isProductInWhitelist(product._id) ? (
+                      <PiHeartStraightFill className="absolute right-4 top-[5rem] text-xl p-2 text-center text-red-500 bg-white w-10 h-10 rounded-full transition-all duration-300" />
+                    ) : (
+                      <PiHeartStraightBold className="absolute right-4 top-[5rem] text-xl p-2 text-center text-white bg-indigo-500 w-10 h-10 rounded-full transition-all duration-300" />
+                    )}
+                  </button>
+
+                  <img
+                    alt="product-img"
+                    src={product.image}
+                    className="w-full h-[400px] p-5  rounded-md object-contain"
+                    onClick={() => handleProductClick(product._id)}
+                  />
+
+                  <div className="mt-4 text-center border-t-2 border-blue-100">
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      {product.brandName}
+                    </h3>
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      {product.productName}
+                    </h3>
+                    <p className="mt-1 text-md text-blue-600 font-extrabold">
+                      Rs.{product.price}
+                    </p>
                     <button
-                      onClick={() => handleEditProduct(product)}
-                      className="text-xl p-2 text-center text-white bg-green-500 w-10 h-10 rounded-full transition-all duration-300"
+                      className="mt-4 bg-blue-500 px-6 py-3 text-md text-white uppercase rounded-lg transition-all duration-300 opacity-100 hover:scale-110 hover:bg-indigo-500"
+                      onClick={() => handleAddToCart(product)}
                     >
-                      <AiOutlineEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteProduct(product._id)}
-                      className="text-xl p-2 text-center text-white bg-red-500 w-10 h-10 rounded-full transition-all duration-300"
-                    >
-                      <AiOutlineDelete />
+                      Add To Cart
                     </button>
                   </div>
-                )}
-
-                <GrZoomIn className="absolute right-4 text-xl p-2 text-center text-white bg-indigo-500 w-10 h-10 rounded-full transition-all duration-300" />
-                {/* Heart Icon */}
-                <button onClick={() => addToWhitelist(product._id)}>
-                  {isProductInWhitelist(product._id) ? (
-                    <PiHeartStraightFill className="absolute right-4 top-[5rem] text-xl p-2 text-center text-red-500 bg-white w-10 h-10 rounded-full transition-all duration-300" />
-                  ) : (
-                    <PiHeartStraightBold className="absolute right-4 top-[5rem] text-xl p-2 text-center text-white bg-indigo-500 w-10 h-10 rounded-full transition-all duration-300" />
-                  )}
-                </button>
-
-                <img
-                  alt="product-img"
-                  src={product.image}
-                  className="w-full h-[400px] p-5 rounded-md object-contain"
-                  onClick={() => handleProductClick(product._id)}
-                />
-
-                <div className="mt-4 text-center border-t-2 border-blue-100">
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    {product.brandName}
-                  </h3>
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    {product.productName}
-                  </h3>
-                  <p className="mt-1 text-md text-blue-600 font-extrabold">
-                    Rs.{product.price}
-                  </p>
-                  <button
-                    className="mt-4 bg-blue-500 px-6 py-3 text-md text-white uppercase rounded-lg transition-all duration-300 opacity-100 hover:scale-110 hover:bg-indigo-500"
-                    onClick={() => handleAddToCart(product)}
-                  >
-                    Add To Cart
-                  </button>
                 </div>
               </div>
             ))}
