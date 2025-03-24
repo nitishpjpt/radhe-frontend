@@ -56,6 +56,7 @@ const OrderDetails = () => {
         );
         // Ensure orderHistory is an array
         setOrderHistory(response.data.orderHistory || []);
+        console.log(response.data.orderHistory);
       } catch (err) {
         setError("Failed to fetch order history.");
         console.error("Error fetching order history:", err);
@@ -111,22 +112,22 @@ const OrderDetails = () => {
                       {item.product ? (
                         <>
                           <img
-                            src={item.product.image}
-                            alt={item.product.name}
+                            src={item.product?.image}
+                            alt={item.product?.name}
                             className="w-16 h-16 object-cover rounded-lg"
                           />
                           <div>
                             <h3 className="text-lg font-medium">
-                              {item.product.name}
+                              {item.product?.name}
                             </h3>
                             <p className="text-gray-600">
-                              <strong>Brand:</strong> {item.product.brandName}
+                              <strong>Brand:</strong> {item.product?.brandName}
                             </p>
                             <p className="text-gray-600">
                               <strong>Quantity:</strong> {item.quantity}
                             </p>
                             <p className="text-gray-600">
-                              <strong>Price:</strong> Rs. {item.product.price}
+                              <strong>Price:</strong> Rs. {item.product?.price}
                             </p>
                           </div>
                         </>

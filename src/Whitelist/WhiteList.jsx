@@ -39,6 +39,7 @@ const WhitelistPage = () => {
         { withCredentials: true }
       );
       setWhitelist(response.data.whitelist);
+      console.log(response.data.whitelist)
     } catch (error) {
       setError("Error fetching whitelist. Please try again later.");
       console.error("Error fetching whitelist:", error);
@@ -136,26 +137,26 @@ const WhitelistPage = () => {
         <div className="pt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {whitelist.map((item) => (
             <div
-              key={item.product._id}
+              key={item.product?._id}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
               <img
-                src={item.product.image}
-                alt={item.product.productName}
+                src={item?.product?.image}
+                alt={item.product?.productName}
                 className="w-full h-48 object-contain cursor-pointer"
-                onClick={() => handleProductClick(item.product._id)}
+                onClick={() => handleProductClick(item.product?._id)}
               />
               <div className="p-4">
-                <h2 className="text-xl font-semibold">{item.product.brandName}</h2>
-                <h3 className="text-lg">{item.product.productName}</h3>
-                <p className="text-blue-600 font-bold">Rs. {item.product.price}</p>
+                <h2 className="text-xl font-semibold">{item.product?.brandName}</h2>
+                <h3 className="text-lg">{item.product?.productName}</h3>
+                <p className="text-blue-600 font-bold">Rs. {item.product?.price}</p>
                 <p className="text-sm text-gray-500">
                   Added on: {new Date(item.addedAt).toLocaleDateString()}
                 </p>
                 <button
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent triggering the product click
-                    handleRemoveFromWhitelist(item.product._id);
+                    handleRemoveFromWhitelist(item.product?._id);
                   }}
                   className="mt-2 w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition-colors duration-300"
                 >

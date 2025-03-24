@@ -153,7 +153,7 @@ const ProductListing = ({ products }) => {
 
   // Check if a product is in the whitelist
   const isProductInWhitelist = (productId) => {
-    return whitelist.some((item) => item.product._id === productId);
+    return whitelist.some((item) => item.product?._id === productId);
   };
   // Handle add to whitelist
   const addToWhitelist = async (productId) => {
